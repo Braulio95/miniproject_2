@@ -22,21 +22,86 @@ You must use the following API to get the Pokémon’s info: https://pokeapi.co 
 
 Stories 
 
-The Pokedex must have a container with a grid of 4x3 cards 
+The Pokedex must have a container with a grid of 4x3 cards DONE
 
-The Pokedex must have a card where the information for each Pokémon must live inside 
+The Pokedex must have a card where the information for each Pokémon must live inside DONE
 
-The Pokémon card must use Flexbox 
+The Pokémon card must use Flexbox DONE
 
-The Pokémon card must contain the following information: "name", "sprite", "types", "attack value", "hp", "defense value", "speed value" 
+The Pokémon card must contain the following information: "name", "sprite", "types", "attack value", "hp", "defense value", "speed value" DONE
 
-You have to choose 12 Pokémon (this can be chosen at random if you aren't familiar with the franchise) and show them at load time
+You have to choose 12 Pokémon (this can be chosen at random if you aren't familiar with the franchise) and show them at load time DONE
 
-As a user, I must be redirected to its Poke Wiki entry when I click the name inside the card 
+As a user, I must be redirected to its Poke Wiki entry when I click the name inside the card DONE
 
-The Pokedex must include a search box where I can type the name of a Pokémon and its information must be the only Pokemon shown inside the grid 
+The Pokedex must include a search box where I can type the name of a Pokémon and its information must be the only Pokemon shown inside the grid DONE
 
-The Pokedex must include a clickable element that will reset the search value and return to the 12 Pokémon you initially show 
+The Pokedex must include a clickable element that will reset the search value and return to the 12 Pokémon you initially show DONE
 
-The app should work and look fine in a 320px width viewport 
+The app should work and look fine in a 320px width viewport DONE
 */
+
+let pokemonlist = document.querySelector("#pokemonlist");
+let urlapi = "https://pokeapi.co/api/v2/pokemon/";
+
+function showAll(){
+    pokemonlist.innerHTML = "";
+    for(let i=1; i<13; i++){
+        fetch(urlapi + i)
+            .then((res)=>res.json())
+            .then((data)=>showPokemon(data))
+    }
+}
+
+function showPokemon(data){
+    const typearray = [];
+    let types = data.types;
+    for(let i=0; i<types.length; i++){
+        let type = types[i];
+        typearray.push(`<p class="${type.type.name} type">${type.type.name}</p>`);
+    }
+
+    const div = document.createElement("div");
+    div.classList.add("pokemon");
+    div.innerHTML = `
+ 
+    <p class="pokemon-id-background">#${data.id}</p>
+    <figure class="pokemon-img">
+        <img src="${data.sprites.other["official-artwork"].front_default}" alt="${data.name}">
+    </figure>
+    <div class="pokemon-info">
+        <div class="pokemon-container">
+            <p class="pokemon-id">#${data.id}</p>
+            <h2 class="pokemon-name"><a href="https://bulbapedia.bulbagarden.net/wiki/${data.name}_(Pok%C3%A9mon)" target="_blank">${data.name}</a></h2>
+        </div>
+        <div class="pokemon-type">
+            ${typearray.join("")}
+        </div>
+        <div class="pokemon-stats">
+            <p class="stat">Hp: ${data.stats[0].base_stat}</p>
+            <p class="stat">Attack: ${data.stats[1].base_stat}</p>
+            <p class="stat">Defense: ${data.stats[2].base_stat}</p>
+            <p class="stat">Speed: ${data.stats[5].base_stat}</p>
+        </div>
+    </div>
+    `;
+    pokemonlist.append(div)
+}
+function filterPokemon(){
+    let searchform = document.querySelector("#search").value;
+    if(searchform.length!=0){
+        pokemonlist.innerHTML = "";
+        for(let i=1; i<13; i++){
+        fetch(urlapi + i)
+                .then((res)=>res.json())
+                .then((data)=>{
+                    if(data.name == searchform.toLowerCase()){
+                        showPokemon(data)
+                    }
+                });
+        }
+    }
+}
+    
+showAll();
+
