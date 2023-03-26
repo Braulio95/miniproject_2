@@ -97,6 +97,8 @@ function filterPokemon(){
                 .then((data)=>{
                     if(data.name == searchform.toLowerCase()){
                         showPokemon(data)
+                    }else{
+                        pokemonlist.innerHTML = "No encontrado :("
                     }
                 });
         }
