@@ -41,15 +41,15 @@ The Pokedex must include a clickable element that will reset the search value an
 The app should work and look fine in a 320px width viewport DONE
 */
 
-let pokemonlist = document.querySelector("#pokemonlist");
-let urlapi = "https://pokeapi.co/api/v2/pokemon/";
+let pokemonlist = document.querySelector("#pokemonlist"); //Selecting the container for all pokemons
+let urlapi = "https://pokeapi.co/api/v2/pokemon/"; //Saving the url string in variable
 
 function showAll(){
-    pokemonlist.innerHTML = "";
-    for(let i=1; i<13; i++){
+    pokemonlist.innerHTML = ""; //In case that container has something we clear it hear
+    for(let i=1; i<13; i++){ //This for loop interates 12 times and the values of i goes from 1 to 12, then this value is concatenated to the url in order to obtain a single pokemon
         fetch(urlapi + i)
             .then((res)=>res.json())
-            .then((data)=>showPokemon(data))
+            .then((data)=>showPokemon(data)) // here we execute the function show pokemon
     }
 }
 
@@ -61,7 +61,7 @@ function showPokemon(data){
         typearray.push(`<p class="${type.type.name} type">${type.type.name}</p>`);
     }
 
-    const div = document.createElement("div");
+    const div = document.createElement("div"); // we create a div element wich contains all the follow html code with the different values of the API
     div.classList.add("pokemon");
     div.innerHTML = `
  
@@ -87,15 +87,15 @@ function showPokemon(data){
     `;
     pokemonlist.append(div)
 }
-function filterPokemon(){
-    let searchform = document.querySelector("#search").value;
-    if(searchform.length!=0){
-        pokemonlist.innerHTML = "";
+function filterPokemon(){ // we define the function to filter the items
+    let searchform = document.querySelector("#search").value; // we get the value written on the formulary
+    if(searchform.length!=0){ 
+        pokemonlist.innerHTML = "";  // we clear the content if it has something
         for(let i=1; i<13; i++){
         fetch(urlapi + i)
                 .then((res)=>res.json())
                 .then((data)=>{
-                    if(data.name == searchform.toLowerCase()){
+                    if(data.name == searchform.toLowerCase()){ // we evaluate if the name written in the formulary is the same of the pokemon name
                         showPokemon(data)
                     }else{
                         pokemonlist.innerHTML = "No encontrado :("
@@ -105,5 +105,5 @@ function filterPokemon(){
     }
 }
     
-showAll();
+showAll(); // we show all pokemon when we first charge the page
 
