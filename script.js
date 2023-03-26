@@ -89,16 +89,14 @@ function showPokemon(data){
 }
 function filterPokemon(){ // we define the function to filter the items
     let searchform = document.querySelector("#search").value; // we get the value written on the formulary
-    if(searchform.length!=0){ 
+    if(searchform.length>0){ 
         pokemonlist.innerHTML = "";  // we clear the content if it has something
         for(let i=1; i<13; i++){
         fetch(urlapi + i)
-                .then((res)=>res.json())
+                .then((res)=>res.json()) // we evaluate if the name written in the formulary is the same of the pokemon name
                 .then((data)=>{
-                    if(data.name == searchform.toLowerCase()){ // we evaluate if the name written in the formulary is the same of the pokemon name
-                        showPokemon(data)
-                    }else{
-                        pokemonlist.innerHTML = "No encontrado :("
+                    if(data.name === searchform.toLowerCase()){ 
+                        showPokemon(data);
                     }
                 });
         }
